@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game of Thrones - IMDb</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Use Roboto font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700,900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.9)),
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23000000"/><path d="M25,75 Q40,25 50,50 T75,25" fill="none" stroke="%23B32100" stroke-width="2" opacity="0.6"/><path d="M15,80 Q35,20 45,45 T80,20" fill="none" stroke="%23FF7B00" stroke-width="2" opacity="0.5"/><path d="M35,85 Q50,30 60,55 T85,30" fill="none" stroke="%23FFD700" stroke-width="2" opacity="0.4"/></svg>');
+            color: #f0d8b1;
+            font-family: 'Roboto', Arial, sans-serif;
+            background-attachment: fixed;
+            background-size: 300px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            background: linear-gradient(to right, #1a0000, #4a0000, #1a0000);
+            border-bottom: 2px solid #ff7b00;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(255, 123, 0, 0.3);
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo h1 {
+            font-size: 32px;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            letter-spacing: 2px;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .logo span {
+            color: #ff7b00;
+            font-size: 24px;
+        }
+        .search-bar {
+            flex-grow: 1;
+            margin: 0 20px;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 1px solid #444;
+            background-color: rgba(26, 0, 0, 0.8);
+            color: #f0d8b1;
+            font-size: 16px;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .search-bar input:focus {
+            outline: none;
+            border-color: #ff7b00;
+            box-shadow: 0 0 10px rgba(255, 123, 0, 0.5);
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .nav-links a {
+            color: #f0d8b1;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .nav-links a:hover {
+            color: #ffd700;
+            background-color: rgba(255, 123, 0, 0.2);
+        }
+        .menu-button {
+            background: linear-gradient(to bottom, #4a0000, #2a0000);
+            color: #ffd700;
+            border: 1px solid #ff7b00;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .menu-button:hover {
+            background: linear-gradient(to bottom, #5a0000, #3a0000);
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background: linear-gradient(to bottom, #2a0000, #1a0000);
+            min-width: 250px;
+            border: 1px solid #ff7b00;
+            border-radius: 4px;
+            box-shadow: 0 8px 16px rgba(179, 33, 0, 0.5);
+            z-index: 1;
+            margin-top: 10px;
+        }
+        .dropdown-content:before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: 15px;
+            border-width: 0 10px 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent #2a0000 transparent;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .menu-section {
+            padding: 15px;
+            border-bottom: 1px solid #ff7b00;
+        }
+        .menu-section:last-child {
+            border-bottom: none;
+        }
+        .menu-section h3 {
+            color: #ffd700;
+            margin-bottom: 10px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .menu-section h3 i {
+            width: 20px;
+            text-align: center;
+        }
+        .menu-items {
+            list-style: none;
+        }
+        .menu-items li {
+            padding: 8px 5px;
+            border-bottom: 1px solid rgba(255, 123, 0, 0.3);
+        }
+        .menu-items li:last-child {
+            border-bottom: none;
+        }
+        .menu-items a {
+            color: #f0d8b1;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px;
+            border-radius: 3px;
+            transition: all 0.2s;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .menu-items a:hover {
+            background-color: rgba(255, 123, 0, 0.2);
+            color: #ffd700;
+        }
+        .menu-items i {
+            width: 20px;
+            text-align: center;
+            color: #ff7b00;
+        }
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)),
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300"><rect width="600" height="300" fill="%23220000"/><path d="M0 150L600 150" stroke="%23B32100" stroke-width="2"/><path d="M300 0L300 300" stroke="%23B32100" stroke-width="2"/></svg>');
+            background-size: cover;
+            padding: 80px 0;
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #ff7b00;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M25,75 Q40,25 50,50 T75,25" fill="none" stroke="%23FF7B00" stroke-width="2" opacity="0.2"/><path d="M15,80 Q35,20 45,45 T80,20" fill="none" stroke="%23FFD700" stroke-width="2" opacity="0.2"/></svg>');
+            background-size: 200px;
+            pointer-events: none;
+        }
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        .hero h2 {
+            font-size: 4rem;
+            color: #ffd700;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+            font-family: 'Roboto', Arial, sans-serif;
+            letter-spacing: 2px;
+        }
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            font-family: 'Roboto', Arial, sans-serif;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .rating {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .rating-value {
+            font-size: 2.5rem;
+            color: #ffd700;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .rating-count {
+            color: #f0d8b1;
+            font-size: 1.2rem;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(to bottom, #ff7b00, #b32100);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin: 10px;
+            font-family: 'Roboto', Arial, sans-serif;
+            border: 1px solid #ffd700;
+            box-shadow: 0 5px 15px rgba(179, 33, 0, 0.5);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+        .btn:hover {
+            background: linear-gradient(to bottom, #ff8c00, #c43200);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(179, 33, 0, 0.7);
+        }
+        .btn-trailer {
+            background: linear-gradient(to bottom, #2a0000, #1a0000);
+            border: 2px solid #ffd700;
+        }
+        .btn-trailer:hover {
+            background: linear-gradient(to bottom, #3a0000, #2a0000);
+        }
+        .video-container {
+            background: linear-gradient(to bottom, #1a0000, #000);
+            padding: 40px;
+            border-radius: 10px;
+            margin: 40px 0;
+            border: 1px solid #ff7b00;
+            box-shadow: 0 10px 25px rgba(179, 33, 0, 0.4);
+        }
+        .video-container h2 {
+            text-align: center;
+            color: #ffd700;
+            margin-bottom: 30px;
+            font-family: 'Roboto', Arial, sans-serif;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        .video-container iframe {
+            width: 100%;
+            height: 600px;
+            border: 3px solid #ff7b00;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+        }
+        .movie-links {
+            background: linear-gradient(to bottom, #1a0000, #000);
+            padding: 40px;
+            border-radius: 10px;
+            margin: 40px 0;
+            border: 1px solid #ff7b00;
+            box-shadow: 0 10px 25px rgba(179, 33, 0, 0.4);
+        }
+        .movie-links h3 {
+            color: #ffd700;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            font-family: 'Roboto', Arial, sans-serif;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .movie-card {
+            background: linear-gradient(to bottom, #2a0000, #1a0000);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #ff7b00;
+            box-shadow: 0 5px 15px rgba(179, 33, 0, 0.3);
+        }
+        .movie-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(179, 33, 0, 0.6);
+            border-color: #ffd700;
+        }
+        .movie-poster {
+            height: 300px;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)),
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="220" height="300" viewBox="0 0 220 300"><rect width="220" height="300" fill="%23220000"/><path d="M0 0L220 300" stroke="%23B32100" stroke-width="2"/><path d="M220 0L0 300" stroke="%23B32100" stroke-width="2"/><circle cx="110" cy="150" r="50" fill="%23330000"/></svg>');
+            background-size: cover;
+            position: relative;
+        }
+        .movie-poster::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to top, #1a0000, transparent);
+        }
+        .movie-info {
+            padding: 20px;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .movie-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ffd700;
+            font-size: 1.2rem;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .movie-year {
+            color: #f0d8b1;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .movie-rating {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            color: #ffd700;
+            font-weight: bold;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .content-section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            font-size: 2.2rem;
+            color: #ffd700;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ff7b00;
+            font-family: 'Roboto', Arial, sans-serif;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        .cast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 25px;
+        }
+        .cast-card {
+            background: linear-gradient(to bottom, #2a0000, #1a0000);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            border: 1px solid #ff7b00;
+            box-shadow: 0 5px 15px rgba(179, 33, 0, 0.3);
+        }
+        .cast-card:hover {
+            transform: translateY(-5px);
+            border-color: #ffd700;
+            box-shadow: 0 10px 20px rgba(179, 33, 0, 0.5);
+        }
+        .cast-img {
+            height: 200px;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)),
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="200" viewBox="0 0 160 200"><rect width="160" height="200" fill="%23220000"/><circle cx="80" cy="70" r="40" fill="%23330000"/><rect x="40" y="120" width="80" height="50" fill="%23330000"/></svg>');
+            background-size: cover;
+        }
+        .cast-info {
+            padding: 15px;
+            text-align: center;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .cast-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #ffd700;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .cast-role {
+            color: #f0d8b1;
+            font-size: 0.9rem;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .sidebar {
+            background: linear-gradient(to bottom, #1a0000, #000);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid #ff7b00;
+            box-shadow: 0 10px 25px rgba(179, 33, 0, 0.4);
+        }
+        .sidebar-widget {
+            margin-bottom: 30px;
+        }
+        .sidebar-title {
+            font-size: 1.6rem;
+            color: #ffd700;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ff7b00;
+            font-family: 'Roboto', Arial, sans-serif;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+        }
+        .details-list {
+            list-style: none;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .details-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 123, 0, 0.3);
+        }
+        .details-list li:last-child {
+            border-bottom: none;
+        }
+        .details-list strong {
+            color: #ffd700;
+            display: inline-block;
+            width: 120px;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .gallery-item {
+            height: 120px;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)),
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><rect width="120" height="120" fill="%23220000"/><path d="M0 0L120 120" stroke="%23B32100" stroke-width="2"/><path d="M120 0L0 120" stroke="%23B32100" stroke-width="2"/></svg>');
+            background-size: cover;
+            border-radius: 5px;
+            border: 1px solid #ff7b00;
+        }
+        footer {
+            background: linear-gradient(to bottom, #1a0000, #000);
+            padding: 40px 0;
+            text-align: center;
+            border-top: 2px solid #ff7b00;
+            margin-top: 60px;
+        }
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .social-links {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+        .social-links a {
+            color: #f0d8b1;
+            font-size: 1.8rem;
+            transition: color 0.3s;
+        }
+        .social-links a:hover {
+            color: #ffd700;
+            transform: scale(1.2);
+        }
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .footer-links a {
+            color: #f0d8b1;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .footer-links a:hover {
+            color: #ffd700;
+        }
+        .copyright {
+            color: #f0d8b1;
+            font-size: 1rem;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .search-bar {
+                width: 100%;
+                margin: 10px 0;
+            }
+            .hero h2 {
+                font-size: 2.8rem;
+            }
+            .dropdown-content {
+                right: auto;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .dropdown-content:before {
+                right: auto;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .movie-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+            .video-container iframe {
+                height: 400px;
+            }
+        }
+        @media (max-width: 600px) {
+            .cast-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .btn {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+            .movie-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            .video-container iframe {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>IMDb<span>®</span></h1>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search Game of Thrones...">
+                </div>
+                <div class="nav-links">
+                    <a href="#">Home</a>
+                    <a href="#">Top Shows</a>
+                    <a href="#">News</a>
+                   
+                    <!-- Menu Dropdown -->
+                    <div class="dropdown">
+                        <div class="menu-button">
+                            <i class="fas fa-bars"></i> Menu
+                        </div>
+                        <div class="dropdown-content">
+                            <div class="menu-section">
+                                <h3><i class="fas fa-fire"></i> Game of Thrones</h3>
+                                <ul class="menu-items">
+                                    <li><a href="#"><i class="fas fa-play-circle"></i> Episodes</a></li>
+                                    <li><a href="#"><i class="fas fa-users"></i> Cast & Crew</a></li>
+                                    <li><a href="#"><i class="fas fa-image"></i> Photos</a></li>
+                                    <li><a href="#"><i class="fas fa-video"></i> Videos</a></li>
+                                    <li><a href="#"><i class="fas fa-star"></i> Trivia</a></li>
+                                </ul>
+                            </div>
+                           
+                            <div class="menu-section">
+                                <h3><i class="fas fa-crown"></i> Houses of Westeros</h3>
+                                <ul class="menu-items">
+                                    <li><a href="#"><i class="fas fa-wolf"></i> House Stark</a></li>
+                                    <li><a href="#"><i class="fas fa-lion"></i> House Lannister</a></li>
+                                    <li><a href="#"><i class="fas fa-dragon"></i> House Targaryen</a></li>
+                                    <li><a href="#"><i class="fas fa-fish"></i> House Tully</a></li>
+                                    <li><a href="#"><i class="fas fa-stag"></i> House Baratheon</a></li>
+                                </ul>
+                            </div>
+                           
+                            <div class="menu-section">
+                                <h3><i class="fas fa-user"></i> My IMDb</h3>
+                                <ul class="menu-items">
+                                    <li><a href="#"><i class="fas fa-bookmark"></i> Watchlist</a></li>
+                                    <li><a href="#"><i class="fas fa-star"></i> Ratings</a></li>
+                                    <li><a href="#"><i class="fas fa-history"></i> History</a></li>
+                                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                                    <li><a href="#"><i class="fas fa-sign-out-alt"></i> Sign Out</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>GAME OF THRONES</h2>
+                <p>Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for millennia.</p>
+                <div class="rating">
+                    <div class="rating-value">9.2</div>
+                    <div class="rating-count">/10 • 2.1M reviews</div>
+                </div>
+                <div class="hero-buttons">
+                    <a href="#" class="btn"><i class="fas fa-play"></i> Watch trailer</a>
+                    <a href="#" class="btn btn-trailer"><i class="fas fa-star"></i> Rate series</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Video Section -->
+    <section class="video-container">
+        <h2>Official Trailer</h2>
+        <iframe src="https://www.youtube.com/embed/BpJYNVhGf1s" title="Game of Thrones Official Trailer" allowfullscreen></iframe>
+    </section>
+    <!-- Movie Links Section -->
+    <section class="movie-links">
+        <div class="container">
+            <h3>Game of Thrones Movies Collection</h3>
+            <div class="movie-grid">
+              <div class="movie-card">
+  <img class="movie-poster"
+       src="https://upload.wikimedia.org/wikipedia/en/d/d8/Game_of_Thrones_title_card.jpg"
+       alt="Game of Thrones Poster" width="300" height="160"/>
+  <div class="movie-info">
+    <div class="movie-title">A Game of Thrones</div>
+    <div class="movie-year">2015</div>
+    <div class="movie-rating">
+      <i class="fas fa-star"></i> 8.2
+    </div>
+  </div>
+</div>
+               <div class="movie-card">
+  <img class="movie-poster" src="image1.jpeg" alt="The Kingsroad Poster" width="300" height="160"/>
+  <div class="movie-info">
+    <div class="movie-title">The Kingsroad</div>
+    <div class="movie-year">2011</div>
+    <div class="movie-rating">
+      <i class="fas fa-star"></i> 8.0
+    </div>
+  </div>
+</div>
+                <div class="movie-card">
+                   <img class="movie-poster"src="image2.jpeg"alt="Winter Is Coming" width="300" height="160" />
+                    <div class="movie-info">
+                        <div class="movie-title">Winter Is Coming</div>
+                        <div class="movie-year">2017</div>
+                        <div class="movie-rating">
+                            <i class="fas fa-star"></i> 8.5
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img class="movie-poster"src="image3.jpeg"alt="The Dragon's Wrath" width="300" height="160" />
+                    <div class="movie-info">
+                        <div class="movie-title">The Dragon's Wrath</div>
+                        <div class="movie-year">2018</div>
+                        <div class="movie-rating">
+                            <i class="fas fa-star"></i> 8.7
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                   <img class="movie-poster"src="image5.jpeg"alt="A Feast for Crows" width="300" height="160" />                  
+                        <div class="movie-info">
+                        <div class="movie-title">A Feast for Crows</div>
+                        <div class="movie-year">2019</div>
+                        <div class="movie-rating">
+                            <i class="fas fa-star"></i> 8.4
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <img class="movie-poster"src="image6.jpeg"alt="The Long Night" width="300" height="160" />                    
+                        <div class="movie-info">
+                        <div class="movie-title">The Long Night</div>
+                        <div class="movie-year">2020</div>
+                        <div class="movie-rating">
+                            <i class="fas fa-star"></i> 9.1
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container">
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Column -->
+            <div class="left-column">
+                <!-- Cast Section -->
+                <section class="content-section">
+                    <h3 class="section-title">Cast</h3>
+                    <div class="cast-grid">
+                        <!-- Emilia Clarke -->
+<div class="cast-card">
+  <img class="cast-img" src="https://upload.wikimedia.org/wikipedia/commons/9/98/Emilia_Clarke_%2848571862157%29.jpg" alt="Emilia Clarke" />
+  <div class="cast-info">
+    <div class="cast-name">Emilia Clarke</div>
+    <div class="cast-role">Daenerys Targaryen</div>
+  </div>
+</div>
+<!-- Kit Harington -->
+<div class="cast-card">
+  <img class="cast-img" src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Kit_Harington.jpg" alt="Kit Harington" />
+  <div class="cast-info">
+    <div class="cast-name">Kit Harington</div>
+    <div class="cast-role">Jon Snow</div>
+  </div>
+</div>
+<!-- Peter Dinklage -->
+<div class="cast-card">
+  <img class="cast-img" src="https://upload.wikimedia.org/wikipedia/commons/5/54/Peter_Dinklage_by_Gage_Skidmore.jpg" alt="Peter Dinklage" />
+  <div class="cast-info">
+    <div class="cast-name">Peter Dinklage</div>
+    <div class="cast-role">Tyrion Lannister</div>
+  </div>
+</div>
+<div class="cast-card">
+  <img class="cast-img" src="actressimage1.jpeg" alt="Lena Headey" width="150" height="120" />
+  <div class="cast-info">
+    <div class="cast-name">Lena Headey</div>
+    <div class="cast-role">Cersei Lannister</div>
+  </div>
+</div>
+<!-- Sophie Turner -->
+<div class="cast-card">
+  <img class="cast-img" src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Sophie_Turner_%2828546212036%29.jpg" alt="Sophie Turner" />
+  <div class="cast-info">
+    <div class="cast-name">Sophie Turner</div>
+    <div class="cast-role">Sansa Stark</div>
+  </div>
+</div>
+<!-- Maisie Williams -->
+<div class="cast-card">
+  <img class="cast-img" src="https://upload.wikimedia.org/wikipedia/commons/1/10/Maisie_Williams_2011.jpg" alt="Maisie Williams" />
+  <div class="cast-info">
+    <div class="cast-name">Maisie Williams</div>
+    <div class="cast-role">Arya Stark</div>
+  </div>
+</div>
+                    </div>
+                </section>
+                <!-- Photos Section -->
+              <section class="content-section">
+    <h3 class="section-title">Movie Stills</h3>
+    <div class="gallery">
+        <figure>
+            <img src="still image1.jpeg" alt="Movie Still 1" width="300" height="200">
+        </figure>
+        <figure>
+            <img src="still image2.jpeg" alt="Movie Still 2" width="300" height="200">
+        </figure>
+        <figure>
+            <img src="still image3.jpeg" alt="Movie Still 3" width="300" height="200">
+        </figure>
+        <figure>
+            <img src="image still4.jpeg" alt="Movie Still 4" width="300" height="200">
+        </figure>
+    </div>
+</section>
+         
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Details Widget -->
+                <div class="sidebar-widget">
+                    <h3 class="sidebar-title">Movie Details</h3>
+                    <ul class="details-list">
+                        <li><strong>Latest Release</strong> December 2022</li>
+                        <li><strong>Country</strong> United States</li>
+                        <li><strong>Language</strong> English</li>
+                        <li><strong>Total Movies</strong> 6</li>
+                        <li><strong>Budget</strong> $420 Million</li>
+                        <li><strong>Box Office</strong> $1.8 Billion</li>
+                    </ul>
+                </div>
+                <!-- Creators Widget -->
+                <div class="sidebar-widget">
+                    <h3 class="sidebar-title">Directors</h3>
+                    <ul class="details-list">
+                        <li>David Benioff</li>
+                        <li>D.B. Weiss</li>
+                        <li>Miguel Sapochnik</li>
+                        <li>Alan Taylor</li>
+                    </ul>
+                </div>
+                <!-- Photos Widget -->
+    <div class="sidebar-widget">
+        <h3 class="sidebar-title">Movie Posters</h3>
+        <div class="gallery">
+           
+            <div class="gallery-item">
+                <img src="posterimage1.jpeg" alt="Game of Thrones Poster 1" width="250" height="100">
+            </div>
+           
+            <div class="gallery-item">
+                <img src="posterimage2.jpeg" alt="Game of Thrones Poster 2" width="250" height="100">
+            </div>
+           
+            <div class="gallery-item">
+                <img src="posterimage3.jpeg" alt="Game of Thrones Poster 3" width="300" height="100">
+            </div>
+            <div class="gallery-item">
+                <img src="posterimage4.jpeg" alt="Game of Thrones Poster 3" width="250" height="100">
+            </div>
+            <div class="gallery-item">
+                <img src="posterimage5.png" alt="Game of Thrones Poster 1" width="250" height="100">
+            </div>
+            <div class="gallery-item">
+                <img src="posterimage6.png" alt="Game of Thrones Poster 1" width="250" height="100">
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="social-links">
+                    <a href="https://www.facebook.com/GameOfThrones" target="_blank"><i class="fab fa-facebook"></i></a>
+                    <a href="https://twitter.com/GameOfThrones" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/gameofthrones/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/user/GameofThrones" target="_blank"><i class="fab fa-youtube"></i></a>
+                </div>
+                <div class="footer-links">
+                    <a href="#">Home</a>
+                    <a href="#">Top Shows</a>
+                    <a href="#">News</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Help</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+                <div class="copyright">
+                    © 2023 IMDb Clone. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Search bar Google redirect
+        document.getElementById('searchInput').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && this.value.trim() !== '') {
+                const query = encodeURIComponent(this.value.trim());
+                window.open('https://www.google.com/search?q=' + query, '_blank');
+            }
+        });
+
+        // Menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuButton = document.querySelector('.menu-button');
+            const dropdown = document.querySelector('.dropdown-content');
+           
+            menuButton.addEventListener('click', function() {
+                if (window.innerWidth <= 900) {
+                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                }
+            });
+           
+            document.addEventListener('click', function(event) {
+                if (window.innerWidth <= 900 &&
+                    !event.target.closest('.dropdown') &&
+                    dropdown.style.display === 'block') {
+                    dropdown.style.display = 'none';
+                }
+            });
+           
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                   
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
