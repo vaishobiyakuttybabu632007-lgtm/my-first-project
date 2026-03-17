@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOCTIS: Echoes of the Overmind</title>
+    <link rel="stylesheet" href="styles.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&family=Courier+Prime&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Audio Elements -->
+    <audio id="audio-s1-hum" loop src="assets/hum.mp3" preload="auto"></audio>
+    <audio id="audio-s2-heartbeat" loop src="assets/heartbeat.mp3" preload="auto"></audio>
+    <audio id="audio-s2-whispers" loop src="assets/whispers.mp3" preload="auto"></audio>
+    <audio id="audio-s3-piano" loop src="assets/piano.mp3" preload="auto"></audio>
+
+    <!-- Audio Control -->
+    <button id="audio-toggle" class="audio-toggle" aria-label="Toggle Audio">
+        <svg viewBox="0 0 24 24" fill="none" class="icon-volume-off">
+            <path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <line x1="2" y1="2" x2="22" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+    </button>
+
+    <div id="app">
+        <!-- Overlay for transition -->
+        <div id="transition-overlay" class="dawning-flash"></div>
+
+        <!-- Section 1: The Witching Hour -->
+        <section id="page-1" class="page active">
+            <!-- Canvas replacing CSS fog for better performance -->
+            <canvas id="fog-canvas"></canvas>
+
+            <div class="eyes-container">
+                <div class="eye left-eye"></div>
+                <div class="eye right-eye"></div>
+            </div>
+
+            <div class="content-container z-top">
+                <h1 class="title staggered-text">2:00 AM</h1>
+                <div class="story-text">
+                    <p class="staggered-text delay-1">The world is silent.</p>
+                    <p class="staggered-text delay-2">Everyone is asleep.</p>
+                    <p class="staggered-text delay-3">But my mind keeps thinking.</p>
+                    <p class="staggered-text delay-4 description">The silence isn't empty. It's heavy, pressed down by
+                        the weight of a thousand 'what ifs.' The clock on the nightstand glows like an accusation. The
+                        mind doesn't rest; it wakes up.</p>
+                </div>
+                <!-- Sleek rounded rectangle neon border button -->
+                <button id="btn-enter" class="neon-button staggered-text delay-5">
+                    <span class="btn-text">Enter the Labyrinth</span>
+                    <div class="btn-mist"></div>
+                </button>
+            </div>
+        </section>
+
+        <!-- Section 2: The Labyrinth of Loops -->
+        <section id="page-2" class="page hidden labyrinth">
+            <!-- Advanced SVG/Canvas rotating maze container -->
+            <div id="maze-container" class="maze-bg"></div>
+
+            <div class="content-container full-width z-top">
+                <!-- Top uneasy storytelling text -->
+                <div class="story-text top-text">
+                    <p class="uneasy-font">In here, thoughts aren't memories. They're predators. One begets two, two
+                        begets a hundred, all echoing off the walls of the maze, until you can't tell which thought was
+                        yours to begin with.</p>
+                </div>
+
+                <div class="thoughts-layer" id="negative-thoughts-container">
+                    <!-- Glitch-core dynamic thoughts generated via JS -->
+                </div>
+
+                <!-- Glowing "tear in the maze" button -->
+                <button id="btn-calm" class="tear-button sticky-center">
+                    <span class="btn-text">Seek the Horizon</span>
+                    <div class="btn-glow"></div>
+                </button>
+            </div>
+        </section>
+
+        <!-- Section 3: First Light -->
+        <section id="page-3" class="page hidden dawning">
+            <!-- Soft-edged sun and dynamic sky gradient -->
+            <div class="sky-gradient"></div>
+            <div class="sun"></div>
+
+            <div class="content-container z-top full-height flex-end">
+                <div class="thoughts-layer" id="positive-thoughts-container">
+                    <!-- Soft, elegant floating thoughts -->
+                </div>
+
+                <div class="story-text final-message fade-up">
+                    <p class="hope-text">The maze hasn't vanished. But now, bathed in the light of a new day, its walls
+                        don't look like walls at all. They look like paths. And you have all the time in the world to
+                        choose which one to take.</p>
+                </div>
+
+                <button id="btn-restart" class="ethereal-button fade-up delay-2">Begin the Night Again</button>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
